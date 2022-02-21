@@ -64,6 +64,7 @@ class FregeCompile extends AbstractCompile {
     @Input
     boolean excludeJavaClasspath = false
 
+    @Input
     boolean verbose = false
 
     @Input
