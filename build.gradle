@@ -50,6 +50,10 @@ dependencies {
     testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0'
 }
 
+test {
+    useJUnitPlatform()
+}
+
 // using the publishing plugin
 
 buildscript {
