@@ -3,6 +3,7 @@ package frege.gradle.tasks
 import org.gradle.api.DefaultTask
 import org.gradle.api.internal.file.FileResolver
 import org.gradle.api.tasks.AbstractExecTask
+import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Input
@@ -13,7 +14,7 @@ import org.gradle.process.internal.JavaExecAction
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class FregeQuickCheck extends AbstractExecTask<FregeQuickCheck> {
+class FregeQuickCheck extends JavaExec {//} AbstractExecTask<FregeQuickCheck> {
 
     // more options to consider:
 /*
@@ -79,9 +80,9 @@ class FregeQuickCheck extends AbstractExecTask<FregeQuickCheck> {
     @Input
     List<String> allJvmArgs = []
 
-    FregeQuickCheck() {//Class<FregeQuickCheck> taskType) {
-        super(FregeQuickCheck.class)
-    }
+//    FregeQuickCheck() {//Class<FregeQuickCheck> taskType) {
+//        super(FregeQuickCheck.class)
+//    }
 
     @TaskAction
     void runQuickCheck() {
