@@ -88,10 +88,12 @@ class FregeQuickCheck extends JavaExec {//} AbstractExecTask<FregeQuickCheck> {
     void runQuickCheck() {
 //        FileResolver fileResolver = getServices().get(FileResolver.class)
         JavaExecAction action = this.getExecActionFactory().newJavaExecAction()
+//        this.setMain("frege.tools.Quick")
 //        JavaExecAction action = new DefaultExecActionFactory(fileResolver).newJavaExecAction()
 //        action.mainClass = "frege.tools.Quick"
-        action.setMain("frege.tools.Quick")
+//        action.setMain("frege.tools.Quick")
 
+        action.getMainClass().set("frege.tools.Quick")
         action.standardInput = System.in
         action.standardOutput = System.out
         action.errorOutput = System.err
