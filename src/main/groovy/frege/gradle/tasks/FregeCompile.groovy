@@ -6,7 +6,7 @@ import org.gradle.api.file.Directory
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
-import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.compile.AbstractCompile
@@ -99,7 +99,7 @@ class FregeCompile extends AbstractCompile {
     @Optional @InputFiles
     FileCollection fregepath
 
-    @InputDirectory
+    @OutputDirectory
     File destinationDir
 
     @Input
