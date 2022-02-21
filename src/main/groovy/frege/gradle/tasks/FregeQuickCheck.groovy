@@ -1,6 +1,8 @@
 package frege.gradle.tasks
+
 import org.gradle.api.DefaultTask
 import org.gradle.api.internal.file.FileResolver
+import org.gradle.api.tasks.AbstractExecTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Input
@@ -8,8 +10,10 @@ import org.gradle.api.tasks.InputDirectory
 import org.gradle.process.internal.DefaultExecActionFactory
 import org.gradle.process.internal.DefaultJavaExecAction
 import org.gradle.process.internal.JavaExecAction
+import groovy.transform.CompileStatic
 
-class FregeQuickCheck extends DefaultTask {
+@CompileStatic
+class FregeQuickCheck extends AbstractExecTask<FregeQuickCheck> {
 
     // more options to consider:
 /*
@@ -66,17 +70,25 @@ class FregeQuickCheck extends DefaultTask {
     //@Internal
     //String moduleJar
     @Input
-    List<String> classpathDirectories = ["$project.buildDir/classes/main", "$project.buildDir/classes/test"]
+    List<String> classpathDirectories = [
+        "$project.buildDir/classes/main".toString(),
+        "$project.buildDir/classes/test".toString()
+    ]
     @Input
     String moduleDir = "$project.buildDir/classes/test"
     @Input
     List<String> allJvmArgs = []
 
+    FregeQuickCheck() {//Class<FregeQuickCheck> taskType) {
+        super(FregeQuickCheck.class)
+    }
+
     @TaskAction
     void runQuickCheck() {
-
-        FileResolver fileResolver = getServices().get(FileResolver.class)
-        JavaExecAction action = new DefaultExecActionFactory(fileResolver).newJavaExecAction()
+//        FileResolver fileResolver = getServices().get(FileResolver.class)
+        JavaExecAction action = this.getExecActionFactory().newJavaExecAction()
+//        JavaExecAction action = new DefaultExecActionFactory(fileResolver).newJavaExecAction()
+//        action.mainClass = "frege.tools.Quick"
         action.setMain("frege.tools.Quick")
 
         action.standardInput = System.in
@@ -84,10 +96,9 @@ class FregeQuickCheck extends DefaultTask {
         action.errorOutput = System.err
 
         def f = project.files(classpathDirectories.collect { s -> new File(s) })
-        action.setClasspath(project.files(project.configurations.compile).plus(project.files(project.configurations.testRuntime)).plus(f))
+        action.setClasspath(project.files(project.configurations.getByName("compile")).plus(project.files(project.configurations.getByName("testRuntime"))).plus(f))
 
-
-        project.configurations.testRuntime.each { println it }
+        project.configurations.getByName("testRuntime").each { println it }
 
         def args = []
         if (help) {
