@@ -3,6 +3,8 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.internal.file.FileResolver
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.process.internal.DefaultExecActionFactory
 import org.gradle.process.internal.DefaultJavaExecAction
 import org.gradle.process.internal.JavaExecAction
@@ -45,28 +47,29 @@ class FregeQuickCheck extends DefaultTask {
 
      */
 
-    @Internal
+    @Input
     Boolean verbose = true
-    @Internal
+    @Input
     Boolean listAvailable = false
-    @Internal
+    @Input
     Boolean help = false
-    @Internal
+    @Input
     Integer num = 100
-    @Internal
+    @Input
     List<String> includePredicates
-    @Internal
+    @Input
     List<String> excludePredicates
-    @Internal
+    @Input
     String moduleName
-    @Internal
-    String moduleDirectory
-    @Internal
-    String moduleJar
-    @Internal
+    //@InputDirectory
+    //String moduleDirectory
+    //@Internal
+    //String moduleJar
+    @Input
     List<String> classpathDirectories = ["$project.buildDir/classes/main", "$project.buildDir/classes/test"]
+    @InputDirectory
     String moduleDir = "$project.buildDir/classes/test"
-    @Internal
+    @Input
     List<String> allJvmArgs = []
 
     @TaskAction
