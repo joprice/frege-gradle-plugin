@@ -25,7 +25,7 @@ class FregeRepl extends JavaExec {
             logger.info "Intended source dir '${sourceDir.absolutePath}' doesn't exist. Using current dir '${currentDir.absolutePath}' ."
             sourceDir = currentDir
         }
-        mainClass.set("frege.repl.FregeRepl")
+        getMainClass().set("frege.repl.FregeRepl")
         workingDir = sourceDir ?: project.projectDir
         standardInput = System.in
         setClasspath(project.files(project.configurations.getByName("runtimeClasspath")) + project.files(targetDir.absolutePath))
