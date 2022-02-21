@@ -15,7 +15,7 @@ import org.gradle.process.internal.JavaExecAction
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class FregeQuickCheck extends DefaultTask{//} AbstractExecTask<FregeQuickCheck> {
+class FregeQuickCheck extends JavaExec {//} AbstractExecTask<FregeQuickCheck> {
 
     // more options to consider:
 /*
@@ -81,51 +81,70 @@ class FregeQuickCheck extends DefaultTask{//} AbstractExecTask<FregeQuickCheck> 
     @Input
     List<String> allJvmArgs = []
 
-//    FregeQuickCheck() {//Class<FregeQuickCheck> taskType) {
+    FregeQuickCheck() {//Class<FregeQuickCheck> taskType) {
 //        super(FregeQuickCheck.class)
-//    }
-
-    @javax.inject.Inject
-    ExecOperations execOperations
-
-    @TaskAction
-    void runQuickCheck() {
-//        FileResolver fileResolver = getServices().get(FileResolver.class)
-//        JavaExecAction action = this.getExecActionFactory().newJavaExecAction()
-        def result = execOperations.javaexec(action -> {
-            action.getMainClass().set("frege.tools.Quick")
-            action.standardInput = System.in
-            action.standardOutput = System.out
-            action.errorOutput = System.err
-            def f = project.files(classpathDirectories.collect { s -> new File(s) })
-            action.setClasspath(project.files(project.configurations.getByName("compile")).plus(project.files(project.configurations.getByName("testRuntime"))).plus(f))
-            project.configurations.getByName("testRuntime").each { println it }
-
-            def args = []
-            if (help) {
-
-            } else {
-                if (verbose) args << "-v"
-                if (listAvailable) args << "-l"
-                if (!allJvmArgs.isEmpty()) {
-                    action.setJvmArgs(allJvmArgs)
-                }
-                args = args + [moduleDir]
+        getMainClass().set("frege.tools.Quick")
+        List<String> args = []
+        if (!help) {
+            if (verbose) args << "-v"
+            if (listAvailable) args << "-l"
+            if (!allJvmArgs.isEmpty()) {
+                setJvmArgs(allJvmArgs)
             }
-            logger.info("Calling Frege QuickCheck with args: '$args'")
-            action.args args
-//            action.setErrorOutput(output)
-//            action.setStandardOutput(output)
-        })
-        if (result.exitValue != 0) {
-            throw new Exception("Failing running quickcheck")
+            args = args + [moduleDir]
         }
+        logger.info("Calling Frege QuickCheck with args: '$args'")
+        setArgs(args)
+    }
+
+    @Override
+    void exec() {
+        def f = project.files(classpathDirectories.collect { s -> new File(s) })
+        setClasspath(project.files(project.configurations.getByName("compile"))
+                .plus(project.files(project.configurations.getByName("testRuntime")))
+                .plus(f)
+        )
+        super.exec()
+    }
+
+//    @TaskAction
+//    void runQuickCheck() {
+////        FileResolver fileResolver = getServices().get(FileResolver.class)
+////        JavaExecAction action = this.getExecActionFactory().newJavaExecAction()
+//        def result = execOperations.javaexec(action -> {
+//            action.getMainClass().set("frege.tools.Quick")
+//            action.standardInput = System.in
+//            action.standardOutput = System.out
+//            action.errorOutput = System.err
+//            def f = project.files(classpathDirectories.collect { s -> new File(s) })
+//            action.setClasspath(project.files(project.configurations.getByName("compile")).plus(project.files(project.configurations.getByName("testRuntime"))).plus(f))
+//            project.configurations.getByName("testRuntime").each { println it }
+//
+//            def args = []
+//            if (help) {
+//
+//            } else {
+//                if (verbose) args << "-v"
+//                if (listAvailable) args << "-l"
+//                if (!allJvmArgs.isEmpty()) {
+//                    action.setJvmArgs(allJvmArgs)
+//                }
+//                args = args + [moduleDir]
+//            }
+//            logger.info("Calling Frege QuickCheck with args: '$args'")
+//            action.args args
+////            action.setErrorOutput(output)
+////            action.setStandardOutput(output)
+//        })
+//        if (result.exitValue != 0) {
+//            throw new Exception("Failing running quickcheck")
+//        }
 //        this.setMain("frege.tools.Quick")
 //        JavaExecAction action = new DefaultExecActionFactory(fileResolver).newJavaExecAction()
 //        action.mainClass = "frege.tools.Quick"
 //        action.setMain("frege.tools.Quick")
 
 //        action.execute()
-    }
+//    }
 
 }
