@@ -1,21 +1,11 @@
 package frege.gradle.tasks
 
-import org.gradle.api.DefaultTask
-import org.gradle.api.internal.file.FileResolver
-import org.gradle.api.tasks.AbstractExecTask
 import org.gradle.api.tasks.JavaExec
-import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
-import org.gradle.process.ExecOperations
-import org.gradle.process.internal.DefaultExecActionFactory
-import org.gradle.process.internal.DefaultJavaExecAction
-import org.gradle.process.internal.JavaExecAction
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class FregeQuickCheck extends JavaExec {//} AbstractExecTask<FregeQuickCheck> {
+class FregeQuickCheck extends JavaExec {
 
     // more options to consider:
 /*
@@ -81,8 +71,7 @@ class FregeQuickCheck extends JavaExec {//} AbstractExecTask<FregeQuickCheck> {
     @Input
     List<String> allJvmArgs = []
 
-    FregeQuickCheck() {//Class<FregeQuickCheck> taskType) {
-//        super(FregeQuickCheck.class)
+    FregeQuickCheck() {
         getMainClass().set("frege.tools.Quick")
         List<String> args = []
         if (!help) {
@@ -99,52 +88,12 @@ class FregeQuickCheck extends JavaExec {//} AbstractExecTask<FregeQuickCheck> {
 
     @Override
     void exec() {
-        def f = project.files(classpathDirectories.collect { s -> new File(s) })
-        setClasspath(project.files(project.configurations.getByName("compileClasspath"))
+        setClasspath(
+            project.files(project.configurations.getByName("compileClasspath"))
                 .plus(project.files(project.configurations.getByName("testRuntimeClasspath")))
-                .plus(f)
+                .plus(project.files(classpathDirectories.collect { s -> new File(s) }))
         )
         super.exec()
     }
-
-//    @TaskAction
-//    void runQuickCheck() {
-////        FileResolver fileResolver = getServices().get(FileResolver.class)
-////        JavaExecAction action = this.getExecActionFactory().newJavaExecAction()
-//        def result = execOperations.javaexec(action -> {
-//            action.getMainClass().set("frege.tools.Quick")
-//            action.standardInput = System.in
-//            action.standardOutput = System.out
-//            action.errorOutput = System.err
-//            def f = project.files(classpathDirectories.collect { s -> new File(s) })
-//            action.setClasspath(project.files(project.configurations.getByName("compile")).plus(project.files(project.configurations.getByName("testRuntime"))).plus(f))
-//            project.configurations.getByName("testRuntime").each { println it }
-//
-//            def args = []
-//            if (help) {
-//
-//            } else {
-//                if (verbose) args << "-v"
-//                if (listAvailable) args << "-l"
-//                if (!allJvmArgs.isEmpty()) {
-//                    action.setJvmArgs(allJvmArgs)
-//                }
-//                args = args + [moduleDir]
-//            }
-//            logger.info("Calling Frege QuickCheck with args: '$args'")
-//            action.args args
-////            action.setErrorOutput(output)
-////            action.setStandardOutput(output)
-//        })
-//        if (result.exitValue != 0) {
-//            throw new Exception("Failing running quickcheck")
-//        }
-//        this.setMain("frege.tools.Quick")
-//        JavaExecAction action = new DefaultExecActionFactory(fileResolver).newJavaExecAction()
-//        action.mainClass = "frege.tools.Quick"
-//        action.setMain("frege.tools.Quick")
-
-//        action.execute()
-//    }
 
 }
