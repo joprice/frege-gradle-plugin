@@ -31,7 +31,7 @@ class FregeRepl extends JavaExec {
         }
         workingDir = sourceDir ?: project.projectDir
         standardInput = System.in
-        setClasspath(project.files(project.configurations.getByName("runtimeClasspath")) + project.files(targetDir.absolutePath))
+        setClasspath(project.files(project.configurations.getByName("compileClasspath")) + project.files(targetDir.absolutePath))
         super.exec()
     }
 
