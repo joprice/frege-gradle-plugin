@@ -3,7 +3,7 @@ apply plugin: "maven-publish" // I don't think we need this at all
 apply plugin: "signing"
 apply plugin: "idea"
 
-apply from: 'gradle/integTest.gradle'
+//apply from: 'gradle/integTest.gradle'
 
 defaultTasks "build"
 
@@ -31,7 +31,7 @@ group = projectGroup
 repositories {
     mavenLocal()
     mavenCentral()
-    
+
     flatDir {
         dirs 'lib'
     }
@@ -47,9 +47,7 @@ dependencies {
     implementation localGroovy()
     testImplementation gradleTestKit()
 
-    testImplementation('org.spockframework:spock-core:1.0-groovy-2.4') {
-        exclude module: 'groovy-all'
-    }
+    testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0'
 }
 
 // using the publishing plugin
