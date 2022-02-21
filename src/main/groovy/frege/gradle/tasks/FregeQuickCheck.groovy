@@ -55,19 +55,19 @@ class FregeQuickCheck extends DefaultTask {
     Boolean help = false
     @Input
     Integer num = 100
-    @Input
-    List<String> includePredicates
-    @Input
-    List<String> excludePredicates
-    @Input
-    String moduleName
+    //@Input
+    //List<String> includePredicates
+    //@Input
+    //List<String> excludePredicates
+    //@Input
+    //String moduleName
     //@InputDirectory
     //String moduleDirectory
     //@Internal
     //String moduleJar
     @Input
     List<String> classpathDirectories = ["$project.buildDir/classes/main", "$project.buildDir/classes/test"]
-    @InputDirectory
+    @Input
     String moduleDir = "$project.buildDir/classes/test"
     @Input
     List<String> allJvmArgs = []
