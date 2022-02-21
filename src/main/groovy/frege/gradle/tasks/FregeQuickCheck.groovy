@@ -100,7 +100,7 @@ class FregeQuickCheck extends JavaExec {//} AbstractExecTask<FregeQuickCheck> {
     @Override
     void exec() {
         def f = project.files(classpathDirectories.collect { s -> new File(s) })
-        setClasspath(project.files(project.configurations.getByName("compile"))
+        setClasspath(project.files(project.configurations.getByName("implementation"))
                 .plus(project.files(project.configurations.getByName("testRuntime")))
                 .plus(f)
         )
